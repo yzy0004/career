@@ -1,0 +1,37 @@
+Given a non-empty array of integers, return the k most frequent elements.
+
+Medium
+
+For example,
+Given [1,1,1,2,2,3] and k = 2, return [1,2].
+
+Note: 
+You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
+
+
+
+public class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> freq = new HashMap();
+        for(int i:nums){
+            freq.put(i,freq.getOrDefault(i, 0)+1);
+        }
+        List<Integer>[] bucket = new List[nums.length+1];
+        for(int key:freq.keySet()){
+            int count = freq.get(key);
+            if(bucket[count]==null){
+                bucket[count]=new LinkedList<Integer>();
+            }
+            bucket[count].add(key);
+        }
+        
+        List<Integer> re = new LinkedList();
+        for(int i=bucket.length-1;i>=0;i--){
+            if(bucket[i]!=null&&re.size()<k){
+                re.addAll(bucket[i]);
+            }
+        }
+        return re;
+    }
+}
