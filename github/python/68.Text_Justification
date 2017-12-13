@@ -1,0 +1,65 @@
+68. Text Justification
+
+
+Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left justified and no extra space is inserted between words.
+
+For example,
+words: ["This", "is", "an", "example", "of", "text", "justification."]
+L: 16.
+
+Return the formatted lines as:
+[
+   "This    is    an",
+   "example  of text",
+   "justification.  "
+]
+Note: Each word is guaranteed not to exceed L in length.
+
+
+
+
+
+class Solution(object):
+    def fullJustify(self, words, maxWidth):
+        """
+        :type words: List[str]
+        :type maxWidth: int
+        :rtype: List[str]
+        """
+        current = len(words[0])
+        space=1
+        re=list()
+        for i in range(0,len(words)):
+            if i==len(words)-1:
+                re.append(self.getline(words[i-space+1:i+1], space-1)+' '*(maxWidth-space+1-current))
+                break
+            if (current+len(words[i+1])+space)<=maxWidth:
+                current+=len(words[i+1])
+                space+=1
+            else:
+                re.append(self.getline(words[i-space+1:i+1], maxWidth-current))
+                current=len(words[i+1])
+                space=1
+        return re
+    
+    
+    def getline(self, words, space):
+        if len(words)==1:
+            return words[0]+' '*space
+        else:
+            eachspace = ' '*(space/(len(words)-1))
+            remaining = space % (len(words)-1)
+            line=words[0]
+            for i in range(1,len(words)):
+                if remaining>0:
+                    line+=' '
+                    remaining-=1
+                line+=eachspace+words[i]
+            return line
+            
