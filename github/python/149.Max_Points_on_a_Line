@@ -1,0 +1,48 @@
+149. Max Points on a Line
+
+
+Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
+
+
+
+
+
+# Definition for a point.
+# class Point(object):
+#     def __init__(self, a=0, b=0):
+#         self.x = a
+#         self.y = b
+
+class Solution(object):
+    def maxPoints(self, points):
+        """
+        :type points: List[Point]
+        :rtype: int
+        """
+        if len(points)<1:
+            return 0
+        max=0
+        for point in points:
+            count=0
+            cdict = collections.defaultdict(int)
+            for p in points:
+                if p.x!=point.x:
+                    slop = 1.0*(p.y-point.y)/(p.x-point.x)
+                    cdict[slop]+=1
+                    if max<cdict[slop]:
+                        max=cdict[slop]
+                elif p.y!=point.y:
+                    count+=1
+                    if max<count:
+                        max=count
+                else:
+                    for k in cdict:
+                        cdict[k]+=1
+                        if cdict[k]>max:
+                            max=cdict[k]
+                    count+=1
+                    if max<count:
+                        max=count
+                        
+        return max
+        

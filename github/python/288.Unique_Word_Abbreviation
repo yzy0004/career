@@ -1,0 +1,116 @@
+288. Unique Word Abbreviation
+
+
+An abbreviation of a word follows the form <first letter><number><last letter>. Below are some examples of word abbreviations:
+
+a) it                      --> it    (no abbreviation)
+
+     1
+b) d|o|g                   --> d1g
+
+              1    1  1
+     1---5----0----5--8
+c) i|nternationalizatio|n  --> i18n
+
+              1
+     1---5----0
+d) l|ocalizatio|n          --> l10n
+Assume you have a dictionary and given a word, find whether its abbreviation is unique in the dictionary. A word's abbreviation is unique if no other word from the dictionary has the same abbreviation.
+
+Example: 
+Given dictionary = [ "deer", "door", "cake", "card" ]
+
+isUnique("dear") -> false
+isUnique("cart") -> true
+isUnique("cane") -> false
+isUnique("make") -> true
+
+
+
+
+class ValidWordAbbr(object):
+
+    def __init__(self, dictionary):
+        """
+        :type dictionary: List[str]
+        """
+        self.dic = {}
+        for s in dictionary:
+            l = len(s)
+            if l not in self.dic:
+                self.dic[l]=[]
+            self.dic[l].append(s)
+        
+        
+
+    def isUnique(self, word):
+        """
+        :type word: str
+        :rtype: bool
+        """
+        l = len(word)
+        if l>0 and l in self.dic:
+            s = self.dic[l]
+        else:
+            return True
+        for st in s:
+            if st[0] == word[0] and st[-1] == word[-1] and st != word:
+                return False
+        return True
+
+
+# Your ValidWordAbbr object will be instantiated and called as such:
+# obj = ValidWordAbbr(dictionary)
+# param_1 = obj.isUnique(word)
+
+
+
+Improve a little bit:
+class ValidWordAbbr(object):
+
+    def __init__(self, dictionary):
+        """
+        :type dictionary: List[str]
+        """
+        self.dic = {}
+        for s in dictionary:
+            l = len(s)
+            if l>2:
+                c=l-2
+                key = ""+s[0]+str(c)+s[-1]
+            elif l>1:
+                key = ""+s[0]+s[-1]
+            else:
+                key = s
+            if key not in self.dic:
+                self.dic[key]=set()
+            self.dic[key].add(s)
+        
+        
+
+    def isUnique(self, word):
+        """
+        :type word: str
+        :rtype: bool
+        """
+        l = len(word)
+        if l>2:
+            c=l-2
+            key = ""+word[0]+str(c)+word[-1]
+        elif l>1:
+            key = ""+word[0]+word[-1]
+        else:
+            key = word
+        if key in self.dic:
+            st = self.dic[key]
+            if len(st)>1 or word not in st:
+                return False
+        return True
+
+
+# Your ValidWordAbbr object will be instantiated and called as such:
+# obj = ValidWordAbbr(dictionary)
+# param_1 = obj.isUnique(word)
+
+
+
