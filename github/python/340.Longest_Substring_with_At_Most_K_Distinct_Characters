@@ -1,0 +1,75 @@
+340. Longest Substring with At Most K Distinct Characters
+
+
+
+Given a string, find the length of the longest substring T that contains at most k distinct characters.
+
+For example, Given s = “eceba” and k = 2,
+
+T is "ece" which its length is 3.
+
+
+
+
+
+class Solution(object):
+    def lengthOfLongestSubstringKDistinct(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: int
+        """
+        if k<=0 or len(s)<1:
+            return 0
+        m = 0
+        current = dict()
+        count = 0
+        head = 0
+        i=0
+        while i<len(s):
+            c=s[i]
+            if len(current)<k:
+                if c in current:
+                    current[c]+=1
+                else:
+                    current[c]=1
+                count+=1
+                i+=1
+            else:
+                if c in current:
+                    current[c]+=1
+                    count+=1
+                    i+=1
+                else:
+                    if current[s[head]]==1:
+                        del current[s[head]]
+                    else:
+                        current[s[head]]-=1
+                    m=max(m,count)
+                    count-=1
+                    head+=1
+        m=max(m,count)
+        return m
+                        
+Improvement:
+When number of the char exceed, remove everything before the char in dict which has smallest index.
+Then calculate the length dynamically
+
+
+class Solution(object):
+    def lengthOfLongestSubstringKDistinct(self, s, k):
+        """
+        :type s: str
+        :type k: int
+        :rtype: int
+        """
+        d = {}
+        low, ret = 0, 0
+        for i, c in enumerate(s):
+            d[c] = i
+            if len(d) > k:
+                low = min(d.values())
+                del d[s[low]]
+                low += 1
+            ret = max(i - low + 1, ret)
+        return ret
