@@ -1,0 +1,32 @@
+345. Reverse Vowels of a String
+
+Write a function that takes a string as input and reverse only the vowels of a string.
+
+Example 1:
+Given s = "hello", return "holle".
+
+Example 2:
+Given s = "leetcode", return "leotcede".
+
+Note:
+The vowels does not include the letter "y".
+
+class Solution(object):
+    def reverseVowels(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        vowels=['a','e','i','o','u','A','E','I','O','U']
+        ca=list(s)
+        h,t=0,len(s)-1
+        while h<t:
+            if ca[h] not in vowels:
+                h+=1
+            elif ca[t] not in vowels:
+                t-=1
+            else:
+                ca[h],ca[t]=ca[t],ca[h]
+                h+=1
+                t-=1
+        return ''.join(ca)

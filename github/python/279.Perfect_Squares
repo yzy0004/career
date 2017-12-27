@@ -1,0 +1,33 @@
+279. Perfect Squares
+
+
+Given a positive integer n, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+For example, given n = 12, return 3 because 12 = 4 + 4 + 4; given n = 13, return 2 because 13 = 4 + 9.
+
+
+
+class Solution(object):
+    def numSquares(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        dp={}
+        dp[0]=0
+        def countsquare(num):
+            if num in dp:
+                return dp[num]
+            i = num/2
+            re=num
+            while i>0:
+                s=i*i
+                if s<=num:
+                    re=min(re, num/s+countsquare(num%s))
+                i-=1
+            dp[num]=re
+            return re
+        return countsquare(n)
+
+
+

@@ -1,0 +1,43 @@
+59. Longest Substring with At Most Two Distinct Characters
+
+
+
+Given a string, find the length of the longest substring T that contains at most 2 distinct characters.
+
+For example, Given s = “eceba”,
+
+T is "ece" which its length is 3.
+
+
+
+class Solution(object):
+    def lengthOfLongestSubstringTwoDistinct(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        start=0
+        last={}
+        count=0
+        re=0
+        for i,c in enumerate(s):
+            if c not in last:
+                if len(last)==2:
+                    a,b=last.items()
+                    if a[1]<b[1]:
+                        last.pop(a[0],None)
+                        re=max(re,count)
+                        count-=a[1]-start+1
+                        start=a[1]+1
+                    else:
+                        last.pop(b[0],None)
+                        re=max(re,count)
+                        count-=b[1]-start+1
+                        start=b[1]+1
+                last[c]=i
+                count+=1
+            else:
+                count+=1
+                last[c]=i
+        re=max(re,count)
+        return re
