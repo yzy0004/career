@@ -1,0 +1,39 @@
+140. Word Break II
+
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, add spaces in s to construct a sentence where each word is a valid dictionary word. You may assume the dictionary does not contain duplicate words.
+
+Return all such possible sentences.
+
+For example, given
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"].
+
+UPDATE (2017/1/4):
+The wordDict parameter had been changed to a list of strings (instead of a set of strings). Please reload the code definition to get the latest changes.
+
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: List[str]
+        """
+        dp={}
+        def searchbreak(s):
+            if not s:
+                return []
+            if s in dp:
+                return dp[s]
+            lobreak=[]
+            if s in wordDict:
+                lobreak.append(s)
+            for i in range(1,len(s)):
+                if s[0:i] in wordDict:
+                    match=searchbreak(s[i:])
+                    for m in match:
+                        lobreak.append(' '.join([s[0:i],m]))
+            dp[s]=lobreak
+            return lobreak
+        return searchbreak(s)
