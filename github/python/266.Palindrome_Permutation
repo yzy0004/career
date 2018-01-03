@@ -1,0 +1,23 @@
+266. Palindrome Permutation
+
+Given a string, determine if a permutation of the string could form a palindrome.
+
+For example,
+"code" -> False, "aab" -> True, "carerac" -> True.
+
+class Solution(object):
+    def canPermutePalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        cdict=collections.defaultdict(int)
+        for c in s:
+            cdict[c]+=1
+        count=0
+        for k,v in cdict.iteritems():
+            if (v&1)==1:
+                count+=1
+        if count>1:
+            return False
+        return True

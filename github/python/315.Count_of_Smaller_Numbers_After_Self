@@ -1,0 +1,62 @@
+315. Count of Smaller Numbers After Self
+
+You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
+
+Example:
+
+Given nums = [5, 2, 6, 1]
+
+To the right of 5 there are 2 smaller elements (2 and 1).
+To the right of 2 there is only 1 smaller element (1).
+To the right of 6 there is 1 smaller element (1).
+To the right of 1 there is 0 smaller element.
+Return the array [2, 1, 1, 0].
+
+
+class Solution(object):
+    def countSmaller(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        
+        indexdict=collections.defaultdict(int)
+        index=1
+        for num in sorted(nums):
+            if num not in indexdict:
+                indexdict[num]=index
+                index+=1
+        tree=[0]*index
+        def update(n,index):
+            i=indexdict[n]
+            while i<index:
+                tree[i]+=1
+                i+=i&(-i)
+        def get(n):
+            i=indexdict[n]-1
+            count=0
+            while i>0:
+                count+=tree[i]
+                i=i&(i-1)
+            return count
+        re=[]
+        for num in nums[::-1]:
+            update(num,index)
+            re.append(get(num))
+        return re[::-1]
+
+
+Using Binary Index Tree(BIT)
+Updating:
+    update for all i that in the index range while i+=i&(-i)
+    This action will update all different set
+    It actually fill each '0' in front of the last '1' with '1', and one at a time 
+Get:
+    get all i for i>0 while i=i&(i-1)
+    remove last '1' everytime
+
+
+Complexity: for 32bit int, it executes mostly 32 times for each update or get
+and it need to run through all the index, while n numbers can be mapped to m indexies where m<=n
+so update and get should be O(logMaxVal) since all numbers are processed using binary and the max num bits used should be 2^a. a is the number of bits which is O(logMaxVal)
+https://www.topcoder.com/community/data-science/data-science-tutorials/binary-indexed-trees/#find
