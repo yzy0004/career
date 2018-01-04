@@ -1,0 +1,51 @@
+158. Read N Characters Given Read4 II - Call multiple times
+
+
+The API: int read4(char *buf) reads 4 characters at a time from a file.
+
+The return value is the actual number of characters read. For example, it returns 3 if there is only 3 characters left in the file.
+
+By using the read4 API, implement the function int read(char *buf, int n) that reads n characters from the file.
+
+Note:
+The read function may be called multiple times.
+
+
+# The read4 API is already defined for you.
+# @param buf, a list of characters
+# @return an integer
+# def read4(buf):
+
+class Solution(object):
+    def __init__(self):
+        self.cache=[]
+    def read(self, buf, n):
+        """
+        :type buf: Destination buffer (List[str])
+        :type n: Maximum number of characters to read (int)
+        :rtype: The number of characters read (int)
+        """
+        index=0
+        while n>0 and len(self.cache)>0:
+            buf[index]=self.cache.pop(0)
+            index+=1
+            n-=1
+        t=n/4
+        for i in range(t):
+            queue=['']*4
+            r=read4(queue)
+            buf[index:index+r]=queue
+            index+=r
+            if r<4:
+                return index
+        tail=n%4
+        if tail>0:
+            queue=['']*4
+            r=read4(queue)
+            self.cache.extend(queue)
+            while tail>0 and r>0:
+                buf[index]=self.cache.pop(0)
+                index+=1
+                tail-=1
+                r-=1
+        return index
