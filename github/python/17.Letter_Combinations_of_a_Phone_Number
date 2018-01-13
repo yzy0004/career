@@ -1,0 +1,24 @@
+17. Letter Combinations of a Phone Number
+
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+
+
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+class Solution(object):
+    def letterCombinations(self, digits):
+        """
+        :type digits: str
+        :rtype: List[str]
+        """
+        if not digits:
+            return []
+        letters=['0','1','abc','def','ghi','jkl','mno','pqrs','tuv','wxyz']
+        re=['']
+        for d in digits:
+            re=[x+y for x in re for y in letters[ord(d)-ord('0')]]
+        return re
