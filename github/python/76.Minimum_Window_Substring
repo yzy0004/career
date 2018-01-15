@@ -63,4 +63,37 @@ class Solution(object):
 
 Improvement:
 
-
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        count=collections.defaultdict(int)
+        valid=0
+        for c in t:
+            count[c]+=1
+            valid+=1
+        start=0
+        end=0
+        minlen=len(s)+1
+        minstart=0
+        
+        while end<len(s):
+            count[s[end]]-=1
+            if count[s[end]]>=0:
+                valid-=1
+            while valid==0:
+                if (end-start+1)<minlen:
+                    minlen=end-start+1
+                    minstart=start
+                count[s[start]]+=1
+                if count[s[start]]>0:
+                    valid+=1
+                start+=1
+            end+=1
+        if minlen<=len(s):
+            return s[minstart:minlen+minstart]
+        else:
+            return ''

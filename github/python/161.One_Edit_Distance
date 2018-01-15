@@ -1,0 +1,31 @@
+161. One Edit Distance
+
+Given two strings S and T, determine if they are both one edit distance apart.
+
+class Solution(object):
+    def isOneEditDistance(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if len(s)>len(t):
+            s,t=t,s
+        self.edit=False
+        def same(s,t):
+            if self.edit:
+                if len(s)!=len(t):
+                    return False
+                for i in range(len(s)):
+                    if s[i]!=t[i]:
+                        return False
+                return True
+            else:
+                for i in range(len(s)):
+                    if s[i]!=t[i]:
+                        self.edit=True
+                        return same(s[i+1:],t[i:]) or same(s[i:],t[i+1:]) or same(s[i+1:],t[i+1:])
+                if len(t)-len(s)==1:
+                    return True
+                return False
+        return same(s,t)

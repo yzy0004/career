@@ -1,0 +1,47 @@
+273. Integer to English Words
+
+Convert a non-negative integer to its english words representation. Given input is guaranteed to be less than 231 - 1.
+
+For example,
+123 -> "One Hundred Twenty Three"
+12345 -> "Twelve Thousand Three Hundred Forty Five"
+1234567 -> "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+
+class Solution(object):
+    def numberToWords(self, num):
+        """
+        :type num: int
+        :rtype: str
+        """
+        if num==0:
+            return 'Zero'
+        two = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"]
+        tens = ['',"Ten","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"]
+        thousands = ["Thousand","Million","Billion","Trillion"]
+        re=[]
+        def nume(num):
+            r=[]
+            h=num/100
+            if h:
+                r.append(two[h])
+                r.append('Hundred')
+            lasttwo=num%100
+            lastone=num%10
+            if lasttwo>19:
+                t=lasttwo/10
+                r.append(tens[t])
+                if lasttwo%10:
+                    r.append(two[lasttwo%10])
+            elif lasttwo>=0:
+                r.append(two[lasttwo])
+            return ' '.join(r).strip()
+        thousandindex=-1
+        while num>0:
+            sec=num%1000
+            if sec!=0:
+                if thousandindex>=0:
+                    re.append(thousands[thousandindex])
+                re.append(nume(sec))
+            thousandindex+=1
+            num=num/1000
+        return ' '.join(re[::-1]).strip()
