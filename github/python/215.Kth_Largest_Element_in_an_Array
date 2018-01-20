@@ -1,0 +1,62 @@
+215. Kth Largest Element in an Array
+
+favorite
+
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+For example,
+Given [3,2,1,5,6,4] and k = 2, return 5.
+
+Note: 
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        def partition(l,h):
+            if l>h:
+                return -1
+            low=l
+            for i in range(l,h):
+                if nums[i]<nums[h]:
+                    nums[i],nums[low]=nums[low],nums[i]
+                    low+=1
+            nums[low],nums[h]=nums[h],nums[low]
+            if low==len(nums)-k:
+                return nums[low]
+            elif low<len(nums)-k:
+                return partition(low+1,h)
+            else:
+                return partition(l,low-1)
+        return partition(0,len(nums)-1)
+
+
+Faster on leetcode:
+class Solution:
+    # @param {integer[]} nums
+    # @param {integer} k
+    # @return {integer}
+    
+    def findKthLargest(self, nums, k):
+        pivot = random.choice(nums)
+        nums1, nums2 = [], [];
+        nums3 = [];
+
+        for num in nums:
+            if num > pivot:
+                nums1.append(num)
+            elif num < pivot:
+                nums2.append(num)
+            else:
+                nums3.append(nums)
+
+        if k <= len(nums1):
+            return self.findKthLargest(nums1, k)
+        elif   len(nums1) < k <= len(nums1)+len(nums3):
+            return pivot
+        else:
+            return self.findKthLargest(nums2, k - (len(nums1) + len(nums3)))
