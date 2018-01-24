@@ -1,0 +1,33 @@
+49. Group Anagrams
+
+Given an array of strings, group anagrams together.
+
+For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"], 
+Return:
+
+[
+  ["ate", "eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+Note: All inputs will be in lower-case.
+
+
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        index=0
+        imap={}
+        re=[]
+        for s in strs:
+            key=tuple(sorted(s))
+            if key in imap:
+                re[imap[key]].append(s)
+            else:
+                imap[key]=index
+                re.append([s])
+                index+=1
+        return re
