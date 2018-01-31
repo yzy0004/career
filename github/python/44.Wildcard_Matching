@@ -1,0 +1,51 @@
+44. Wildcard Matching
+
+Implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "*") → true
+isMatch("aa", "a*") → true
+isMatch("ab", "?*") → true
+isMatch("aab", "c*a*b") → false
+
+class Solution(object):
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        laststar=-1
+        si=0
+        pi=0
+        match=0
+        while si<len(s):
+            if pi<len(p) and p[pi]=='*':
+                laststar=pi
+                match=si
+                pi+=1
+            elif pi<len(p) and (p[pi]=='?' or p[pi]==s[si]):
+                si+=1
+                pi+=1
+            elif laststar>=0:
+                pi=laststar+1
+                match+=1
+                si=match
+            else:
+                return False
+        while pi<len(p):
+            if p[pi]!='*':
+                return False
+            pi+=1
+        return True
