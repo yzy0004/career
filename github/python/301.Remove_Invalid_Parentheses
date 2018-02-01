@@ -1,0 +1,65 @@
+301. Remove Invalid Parentheses
+
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Examples:
+"()())()" -> ["()()()", "(())()"]
+"(a)())()" -> ["(a)()()", "(a())()"]
+")(" -> [""]
+
+Solution I BFS:
+class Solution(object):
+    def removeInvalidParentheses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        def valid(s):
+            count=0
+            for c in s:
+                if c=='(':
+                    count+=1
+                elif c==')':
+                    count-=1
+                    if count<0:
+                        return False
+            return count==0
+        queue={s}
+        while True:
+            found=filter(valid,queue)
+            if found:
+                return found
+            queue={s[:i]+s[i+1:] for s in queue for i in range(len(s))}
+        
+
+
+Solution II DFS:
+class Solution(object):
+    def removeInvalidParentheses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+        res=[]
+        def remove(s,check,replace,pattern):
+            count=0
+            for i in range(check,len(s)):
+                if s[i]==pattern[0]:
+                    count+=1
+                elif s[i]==pattern[1]:
+                    count-=1
+                if count>=0:
+                    continue
+                for j in range(replace,i+1):
+                    if s[j]==pattern[1] and (j==replace or s[j-1]!=pattern[1]):
+                        remove(s[:j]+s[j+1:],i,j,pattern)
+                return
+            s=s[::-1]
+            if pattern[0]==')':
+                res.append(s)
+            else:
+                remove(s,0,0,(')','('))
+        remove(s,0,0,('(',')'))
+        return res
