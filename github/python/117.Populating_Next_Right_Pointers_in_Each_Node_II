@@ -1,0 +1,85 @@
+117. Populating Next Right Pointers in Each Node II
+
+Follow up for problem "Populating Next Right Pointers in Each Node".
+
+What if the given tree could be any binary tree? Would your previous solution still work?
+
+Note:
+
+You may only use constant extra space.
+For example,
+Given the following binary tree,
+         1
+       /  \
+      2    3
+     / \    \
+    4   5    7
+After calling your function, the tree should look like:
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \    \
+    4-> 5 -> 7 -> NULL
+
+
+Solution I:
+
+# Definition for binary tree with next pointer.
+# class TreeLinkNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+#         self.next = None
+
+class Solution:
+    # @param root, a tree link node
+    # @return nothing
+    def connect(self, root):
+        head=root
+        parent=None
+        while head or parent:
+            if not head:
+                if parent.right:
+                    head=parent.right
+                else:
+                    parent=parent.next
+                    if parent:
+                        head=parent.left or parent.right
+                continue
+            else:
+                c=head
+                cp=parent
+                n=None
+                while n or cp:
+                    while not n and cp:
+                        if cp.right and cp.right!=c:
+                            n=cp.right
+                        else:
+                            cp=cp.next
+                            if cp:
+                                n=cp.left
+                    c.next=n
+                    c=n
+                    n=None
+            parent=head
+            head=head.left
+
+Solution II:
+
+class Solution:
+    # @param root, a tree link node
+    # @return nothing
+    def connect(self, root):
+        while root:
+            head=TreeLinkNode(0)
+            cur=head
+            while root:
+                if root.left:
+                    cur.next=root.left
+                    cur=cur.next
+                if root.right:
+                    cur.next=root.right
+                    cur=cur.next
+                root=root.next
+            root=head.next
