@@ -1,0 +1,46 @@
+745. Prefix and Suffix Search
+
+Given many words, words[i] has weight i.
+
+Design a class WordFilter that supports one function, WordFilter.f(String prefix, String suffix). It will return the word with given prefix and suffix with maximum weight. If no word exists, return -1.
+
+Examples:
+Input:
+WordFilter(["apple"])
+WordFilter.f("a", "e") // returns 0
+WordFilter.f("b", "") // returns -1
+Note:
+words has length in range [1, 15000].
+For each test case, up to words.length queries WordFilter.f may be made.
+words[i] has length in range [1, 10].
+prefix, suffix have lengths in range [0, 10].
+words[i] and prefix, suffix queries consist of lowercase letters only.
+
+class WordFilter(object):
+    def __init__(self, words):
+        """
+        :type words: List[str]
+        """
+        self.pre=collections.defaultdict(set)
+        self.suf=collections.defaultdict(set)
+        self.weight={}
+        for i,w in enumerate(words):
+            self.weight[w]=i
+            for j in range(len(w)+1):
+                self.pre[w[0:j]].add(w)
+                self.suf[w[len(w)-j:len(w)]].add(w)
+                
+    def f(self, prefix, suffix):
+        """
+        :type prefix: str
+        :type suffix: str
+        :rtype: int
+        """
+        com=self.pre[prefix]&self.suf[suffix]
+        m=-1
+        for w in list(com):
+            m=max(m,self.weight[w])
+        return m
+# Your WordFilter object will be instantiated and called as such:
+# obj = WordFilter(words)
+# param_1 = obj.f(prefix,suffix)
