@@ -1,0 +1,19 @@
+275. H-Index II
+
+Follow up for H-Index: What if the citations array is sorted in ascending order? Could you optimize your algorithm?
+
+class Solution(object):
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        s,e=0,len(citations)-1
+        n=len(citations)
+        while s<=e:
+            mid=s+(e-s)/2
+            if citations[mid]<(n-mid):
+                s=mid+1
+            else:
+                e=mid-1
+        return n-s
