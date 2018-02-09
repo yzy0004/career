@@ -1,0 +1,82 @@
+410. Split Array Largest Sum
+
+Given an array which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays. Write an algorithm to minimize the largest sum among these m subarrays.
+
+Note:
+If n is the length of array, assume the following constraints are satisfied:
+
+1 ≤ n ≤ 1000
+1 ≤ m ≤ min(50, n)
+Examples:
+
+Input:
+nums = [7,2,5,10,8]
+m = 2
+
+Output:
+18
+
+Explanation:
+There are four ways to split nums into two subarrays.
+The best way is to split it into [7,2,5] and [10,8],
+where the largest sum among the two subarrays is only 18.
+
+
+Solution I ( get TLE ):
+class Solution(object):
+    def splitArray(self, nums, m):
+        """
+        :type nums: List[int]
+        :type m: int
+        :rtype: int
+        """
+        dp={}
+        def findmax(nums,m):
+            key=(len(nums),m)
+            if key in dp:
+                return dp[key]
+            if m==1:
+                dp[key]=sum(nums)
+                return dp[key]
+            if len(nums)==m:
+                dp[key]=max(nums)
+                return dp[key]
+            minval=sys.maxint
+            for i in range(m-1,len(nums)):
+                ma=max(sum(nums[i:]),findmax(nums[:i],m-1))
+                minval=min(ma,minval)
+            dp[key]=minval
+            return minval
+        return findmax(nums,m)
+
+
+Solution II:(binary search)
+
+class Solution(object):
+    def splitArray(self, nums, m):
+        """
+        :type nums: List[int]
+        :type m: int
+        :rtype: int
+        """
+        def valid(num):
+            current=0
+            count=0
+            for n in nums:
+                current+=n
+                if current>num:
+                    count+=1
+                    if count>=m:
+                        return False
+                    current=n
+            return True
+        
+        l=max(nums)
+        r=sum(nums)
+        while l<r:
+            mid=l+(r-l)/2
+            if valid(mid):
+                r=mid
+            else:
+                l=mid+1
+        return l
